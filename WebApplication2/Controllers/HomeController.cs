@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ namespace WebApplication2.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly AppDbContext a;
+        private readonly HttpClient h;
 
         public HomeController(ILogger<HomeController> logger, AppDbContext c)
         {
@@ -21,11 +23,14 @@ namespace WebApplication2.Controllers
             this.a = c;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
 
             
             ViewBag.a = this.a.users;
+            HttpClient h = new HttpClient();
+            var response = await h.GetAsync("https://reqres.in/api/users?page=2");
+            Console.WriteLine(response);
             return View();
         }
 
